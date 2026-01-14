@@ -1,0 +1,69 @@
+{{ if .Values.policies.gatekeeper.enabled }}
+apiVersion: mutations.gatekeeper.sh/v1
+kind: Assign
+metadata:
+  name: jenkins-ci-node-affinity
+spec:
+  applyTo:
+    - groups: [""]
+      kinds: [Pod]
+      versions: [v1]
+  match:
+    scope: Namespaced
+    kinds:
+      - apiGroups: [v1]
+        kinds: [Pod]
+    {{- if .Values.policies.matchPods.labelSelector.enabled }}
+    labelSelector:
+      matchLabels:
+        {{ .Values.policies.matchPods.labelSelector.matchLabels }}
+    {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
+    namespaceSelector:
+      matchLabels:
+        {{ .Values.policies.matchPods.namespaceSelector.matchLabels }}
+    {{- else if .Values.policies.matchPods.namespaces.enabled }}
+    namespaces:
+      {{- range .Values.namespaces.names }}
+      - {{ . | quote }}
+      {{- end }}
+    {{- end }}
+  location: "spec.affinity"
+  parameters:
+    assign:
+      value:
+        {{ .Values.policies.affinity }}
+---
+apiVersion: mutations.gatekeeper.sh/v1
+kind: Assign
+metadata:
+  name: jenkins-ci-node-tolerations
+spec:
+  applyTo:
+    - groups: [""]
+      kinds: [Pod]
+      versions: [v1]
+  match:
+    scope: Namespaced
+    kinds:
+      - apiGroups: [v1]
+        kinds: [Pod]
+    {{- if .Values.policies.matchPods.labelSelector.enabled }}
+    labelSelector:
+      matchLabels:
+        {{ .Values.policies.matchPods.labelSelector.matchLabels }}
+    {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
+    namespaceSelector:
+      matchLabels:
+        {{ .Values.policies.matchPods.namespaceSelector.matchLabels }}
+    {{- else if .Values.policies.matchPods.namespaces.enabled }}
+    namespaces:
+      {{- range .Values.namespaces.names }}
+      - {{ . | quote }}
+      {{- end }}
+    {{- end }}
+  location: "spec.tolerations"
+  parameters:
+    assign:
+      value:
+        {{ .Values.policies.tolerations }}
+{{ end }}

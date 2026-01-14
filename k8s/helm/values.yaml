@@ -1,0 +1,48 @@
+global:
+  networkPolicies:
+    enabled: true
+    doguSelector:
+      matchLabels:
+        dogu.name: jenkins
+    agentSelector:
+      matchLabels:
+        cloudogu.com/pod-kind: jenkins-ci
+images:
+  inboundAgent: jenkins/inbound-agent:latest
+namespaces:
+  create: true
+  names: [jenkins-ci]
+serviceAccount:
+  name: jenkins
+# policies for assigning jenkins agent pods to a specific node
+policies:
+  kyverno:
+    enabled: true
+  gatekeeper:
+    enabled: false
+  matchPods:
+    labelSelector:
+      enabled: false
+      matchLabels:
+        cloudogu.com/pod-kind: jenkins-ci
+    namespaceSelector:
+      enabled: false
+      matchLabels:
+        kubernetes.io/metadata.name: jenkins-ci
+    namespaces:
+      enabled: true
+      # for names see namespace.names
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: reserved-node
+                operator: In
+                values:
+                  - jenkins-ci
+  tolerations:
+    - key: reserved-node
+      operator: Equal
+      value: jenkins-ci
+      effect: NoSchedule

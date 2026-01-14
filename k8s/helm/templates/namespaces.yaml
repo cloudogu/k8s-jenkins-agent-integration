@@ -1,0 +1,9 @@
+{{ range .Values.namespaces.names }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ . | quote }}
+  labels:
+    kubernetes.io/metadata.name: {{ . | quote }}
+---
+{{ end }}

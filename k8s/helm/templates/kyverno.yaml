@@ -1,0 +1,35 @@
+{{ if .Values.policies.kyverno.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: jenkins-ci-node-assign
+spec:
+  rules:
+    - name: jenkins-ci-node-assign
+      match:
+        any:
+          - resources:
+              kinds:
+                - /v1/Pod
+              {{- if .Values.policies.matchPods.labelSelector.enabled }}
+              selector:
+                matchLabels:
+                  {{ .Values.policies.matchPods.labelSelector.matchLabels }}
+              {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
+              namespaceSelector:
+                matchLabels:
+                  {{ .Values.policies.matchPods.namespaceSelector.matchLabels }}
+              {{- else if .Values.policies.matchPods.namespaces.enabled }}
+              namespaces:
+                {{- range .Values.namespaces.names }}
+                - {{ . | quote }}
+                {{- end }}
+              {{- end }}
+      mutate:
+        patchStrategicMerge:
+          spec:
+            affinity:
+              {{ .Values.policies.affinity }}
+            tolerations:
+              {{ .Values.policies.tolerations }}
+{{ end }}
