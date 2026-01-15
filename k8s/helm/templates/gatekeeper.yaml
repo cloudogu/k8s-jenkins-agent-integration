@@ -15,23 +15,20 @@ spec:
         kinds: [Pod]
     {{- if .Values.policies.matchPods.labelSelector.enabled }}
     labelSelector:
-      matchLabels:
-        {{ .Values.policies.matchPods.labelSelector.matchLabels }}
+      matchLabels: {{ .Values.policies.matchPods.labelSelector.matchLabels | toYaml | nindent 6 }}
     {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
     namespaceSelector:
-      matchLabels:
-        {{ .Values.policies.matchPods.namespaceSelector.matchLabels }}
+      matchLabels: {{ .Values.policies.matchPods.namespaceSelector.matchLabels | toYaml | nindent 6 }}
     {{- else if .Values.policies.matchPods.namespaces.enabled }}
     namespaces:
       {{- range .Values.namespaces.names }}
-      - {{ . | quote }}
+      - {{ . }}
       {{- end }}
     {{- end }}
   location: "spec.affinity"
   parameters:
     assign:
-      value:
-        {{ .Values.policies.affinity }}
+      value: {{ .Values.policies.affinity | toYaml | nindent 8 }}
 ---
 apiVersion: mutations.gatekeeper.sh/v1
 kind: Assign
@@ -49,21 +46,18 @@ spec:
         kinds: [Pod]
     {{- if .Values.policies.matchPods.labelSelector.enabled }}
     labelSelector:
-      matchLabels:
-        {{ .Values.policies.matchPods.labelSelector.matchLabels }}
+      matchLabels: {{ .Values.policies.matchPods.labelSelector.matchLabels | toYaml | nindent 6 }}
     {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
     namespaceSelector:
-      matchLabels:
-        {{ .Values.policies.matchPods.namespaceSelector.matchLabels }}
+      matchLabels: {{ .Values.policies.matchPods.namespaceSelector.matchLabels | toYaml | nindent 6 }}
     {{- else if .Values.policies.matchPods.namespaces.enabled }}
     namespaces:
       {{- range .Values.namespaces.names }}
-      - {{ . | quote }}
+      - {{ . }}
       {{- end }}
     {{- end }}
   location: "spec.tolerations"
   parameters:
     assign:
-      value:
-        {{ .Values.policies.tolerations }}
+      value: {{ .Values.policies.tolerations | toYaml | nindent 8 }}
 {{ end }}

@@ -13,23 +13,19 @@ spec:
                 - /v1/Pod
               {{- if .Values.policies.matchPods.labelSelector.enabled }}
               selector:
-                matchLabels:
-                  {{ .Values.policies.matchPods.labelSelector.matchLabels }}
+                matchLabels: {{ .Values.policies.matchPods.labelSelector.matchLabels | toYaml | nindent 18 }}
               {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
               namespaceSelector:
-                matchLabels:
-                  {{ .Values.policies.matchPods.namespaceSelector.matchLabels }}
+                matchLabels: {{ .Values.policies.matchPods.namespaceSelector.matchLabels | toYaml | nindent 18 }}
               {{- else if .Values.policies.matchPods.namespaces.enabled }}
               namespaces:
                 {{- range .Values.namespaces.names }}
-                - {{ . | quote }}
+                - {{ . }}
                 {{- end }}
               {{- end }}
       mutate:
         patchStrategicMerge:
           spec:
-            affinity:
-              {{ .Values.policies.affinity }}
-            tolerations:
-              {{ .Values.policies.tolerations }}
+            affinity: {{ .Values.policies.affinity | toYaml | nindent 14 }}
+            tolerations: {{ .Values.policies.tolerations | toYaml | nindent 14 }}
 {{ end }}

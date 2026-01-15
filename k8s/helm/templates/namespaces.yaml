@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ . | quote }}
+  name: {{ . }}
   labels:
-    kubernetes.io/metadata.name: {{ . | quote }}
+    kubernetes.io/metadata.name: {{ . }}
 ---
 {{ end }}

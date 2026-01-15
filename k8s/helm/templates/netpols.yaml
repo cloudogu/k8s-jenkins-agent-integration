@@ -7,8 +7,7 @@ kind: NetworkPolicy
 metadata:
   name: agent-to-jenkins
 spec:
-  podSelector:
-    {{ $doguSelector }}
+  podSelector: {{ $doguSelector | toYaml | nindent 4 }}
   policyTypes:
     - Ingress
   ingress:
@@ -16,9 +15,8 @@ spec:
       {{- range .Values.namespaces.names }}
       - namespaceSelector:
           matchLabels:
-            kubernetes.io/metadata.name: {{ . | quote }}
-        podSelector:
-          {{ $agentSelector }}
+            kubernetes.io/metadata.name: {{ . }}
+        podSelector: {{ $agentSelector | toYaml | nindent 10 }}
       {{- end }}
 ---
 {{ range .Values.namespaces.names }}
@@ -26,18 +24,16 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: jenkins-to-agents
-  namespace: {{ . | quote }}
+  namespace: {{ . }}
 spec:
-  podSelector:
-    {{ $agentSelector }}
+  podSelector: {{ $agentSelector | toYaml | nindent 4 }}
   policyTypes:
     - Ingress
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: {{ $releaseNamespace }}
-          podSelector:
-            {{ $doguSelector }}
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ $releaseNamespace }}
+        podSelector: {{ $doguSelector | toYaml | nindent 10 }}
 ---
 {{ end }}
