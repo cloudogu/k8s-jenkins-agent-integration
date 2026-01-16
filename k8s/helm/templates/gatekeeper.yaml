@@ -16,10 +16,12 @@ spec:
     {{- if .Values.policies.matchPods.labelSelector.enabled }}
     labelSelector:
       matchLabels: {{ .Values.policies.matchPods.labelSelector.matchLabels | toYaml | nindent 6 }}
-    {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
+    {{- end }}
+    {{- if .Values.policies.matchPods.namespaceSelector.enabled }}
     namespaceSelector:
       matchLabels: {{ .Values.policies.matchPods.namespaceSelector.matchLabels | toYaml | nindent 6 }}
-    {{- else if .Values.policies.matchPods.namespaces.enabled }}
+    {{- end }}
+    {{- if .Values.policies.matchPods.namespaces.enabled }}
     namespaces:
       {{- range .Values.namespaces.names }}
       - {{ . }}
@@ -47,10 +49,12 @@ spec:
     {{- if .Values.policies.matchPods.labelSelector.enabled }}
     labelSelector:
       matchLabels: {{ .Values.policies.matchPods.labelSelector.matchLabels | toYaml | nindent 6 }}
-    {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
+    {{- end }}
+    {{- if .Values.policies.matchPods.namespaceSelector.enabled }}
     namespaceSelector:
       matchLabels: {{ .Values.policies.matchPods.namespaceSelector.matchLabels | toYaml | nindent 6 }}
-    {{- else if .Values.policies.matchPods.namespaces.enabled }}
+    {{- end }}
+    {{- if .Values.policies.matchPods.namespaces.enabled }}
     namespaces:
       {{- range .Values.namespaces.names }}
       - {{ . }}

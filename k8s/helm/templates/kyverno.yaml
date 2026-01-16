@@ -14,10 +14,12 @@ spec:
               {{- if .Values.policies.matchPods.labelSelector.enabled }}
               selector:
                 matchLabels: {{ .Values.policies.matchPods.labelSelector.matchLabels | toYaml | nindent 18 }}
-              {{- else if .Values.policies.matchPods.namespaceSelector.enabled }}
+              {{- end }}
+              {{- if .Values.policies.matchPods.namespaceSelector.enabled }}
               namespaceSelector:
                 matchLabels: {{ .Values.policies.matchPods.namespaceSelector.matchLabels | toYaml | nindent 18 }}
-              {{- else if .Values.policies.matchPods.namespaces.enabled }}
+              {{- end }}
+              {{- if .Values.policies.matchPods.namespaces.enabled }}
               namespaces:
                 {{- range .Values.namespaces.names }}
                 - {{ . }}
