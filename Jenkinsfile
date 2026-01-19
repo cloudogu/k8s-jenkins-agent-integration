@@ -71,14 +71,14 @@ node('docker') {
                     }
 
                     stage('Test k8s-jenkins-agent-integration') {
-                        k3d.kubectl("get ns jenkins-ci")
-                        k3d.kubectl("get clusterpolicy jenkins-ci-node-assign")
-                        k3d.kubectl("get assign jenkins-ci-node-affinity")
-                        k3d.kubectl("get assign jenkins-ci-node-tolerations")
-                        k3d.kubectl("get netpol agents-to-jenkins")
-                        k3d.kubectl("-n jenkins-ci get netpol jenkins-to-agents")
-                        k3d.kubectl("-n jenkins-ci get role jenkins-ci-role")
-                        k3d.kubectl("-n jenkins-ci get rolebinding jenkins-ci-binding")
+                        k3d.kubectl("get ns jenkins-ci -o yaml")
+                        k3d.kubectl("get clusterpolicy jenkins-ci-node-assign -o yaml")
+                        k3d.kubectl("get assign jenkins-ci-node-affinity -o yaml")
+                        k3d.kubectl("get assign jenkins-ci-node-tolerations -o yaml")
+                        k3d.kubectl("get netpol agents-to-jenkins -o yaml")
+                        k3d.kubectl("-n jenkins-ci get netpol jenkins-to-agents -o yaml")
+                        k3d.kubectl("-n jenkins-ci get role jenkins-ci-role -o yaml")
+                        k3d.kubectl("-n jenkins-ci get rolebinding jenkins-ci-binding -o yaml")
                     }
                 } catch(Exception e) {
                     k3d.collectAndArchiveLogs()
