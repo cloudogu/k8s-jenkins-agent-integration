@@ -54,12 +54,27 @@ node('docker') {
                         k3d.kubectl("create serviceaccount jenkins")
                     }
 
+                    stage('Deploy Kyverno') {
+                        k3d.helm("repo add kyverno https://kyverno.github.io/kyverno/")
+                        k3d.helm("repo update")
+                        k3d.helm("install kyverno kyverno/kyverno -n kyverno --create-namespace")
+                    }
+
+                    stage('Deploy Gatekeeper') {
+                        k3d.helm("repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts")
+                        k3d.helm("repo update")
+                        k3d.helm("install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gatekeeper-system --create-namespace")
+                    }
+
                     stage('Deploy k8s-jenkins-agent-integration') {
-                        k3d.helm("install ${repositoryName} ${helmChartDir} --set policies.kyverno.enabled=false")
+                        k3d.helm("install ${repositoryName} ${helmChartDir} --set policies.gatekeeper.enabled=true")
                     }
 
                     stage('Test k8s-jenkins-agent-integration') {
                         k3d.kubectl("get ns jenkins-ci")
+                        k3d.kubectl("get clusterpolicy jenkins-ci-node-assign")
+                        k3d.kubectl("get assign jenkins-ci-node-affinity")
+                        k3d.kubectl("get assign jenkins-ci-node-tolerations")
                         k3d.kubectl("get netpol agents-to-jenkins")
                         k3d.kubectl("-n jenkins-ci get netpol jenkins-to-agents")
                         k3d.kubectl("-n jenkins-ci get role jenkins-ci-role")
