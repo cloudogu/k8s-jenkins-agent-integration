@@ -1,35 +1,57 @@
 global:
   networkPolicies:
+    # If NetworkPolicies should be used at all.
+    # Normally the Cloudogu EcoSystem uses NetworkPolicies, so this is necessary.
+    # If for some reason, you do not want or need NetworkPolicies, they can be disabled here.
     enabled: true
+    # The selector that should be used for NetworkPolicies to select the Dogu's Pod.
+    # Normally, this does not have to be adjusted.
     doguSelector:
       matchLabels:
         dogu.name: jenkins
+    # The selector that should be used for NetworkPolicies to select Jenkins agent Pods.
+    # This has to match labels set for the agent Pods in the Dogu's configuration.
     agentSelector:
       matchLabels:
         cloudogu.com/pod-kind: jenkins-ci
+
 namespaces:
+  # Whether to create the namespaces specified in namespaces.names.
   create: true
+  # List of the namespaces to create resources (NetworkPolicies, RBAC, ...) for.
   names: [jenkins-ci]
+
+# The ServiceAccount to bind Roles to.
+# Since the ServiceAccount is provided by the Jenkins dogu, this usually does not have to be adjusted.
 serviceAccount:
   name: jenkins
+
 # policies for assigning jenkins agent pods to a specific node
 policies:
   kyverno:
+    # Whether the Kyverno ClusterPolicy to assign agent pods to specific nodes should be applied.
     enabled: true
   gatekeeper:
+    # Whether the Gatekeeper Assign policies to assign agent pods to specific nodes should be applied.
     enabled: false
   matchPods:
     labelSelector:
+      # Whether to match pods via their labels.
       enabled: false
+      # Labels to match Pods with.
       matchLabels:
         cloudogu.com/pod-kind: jenkins-ci
     namespaceSelector:
+      # Whether to match namespaces via their labels.
       enabled: false
+      # Labels to match the namespaces with.
       matchLabels:
         kubernetes.io/metadata.name: jenkins-ci
     namespaces:
+      # Whether to match pods from the namespaces specified in namespaces.names.
       enabled: true
       # for names see namespace.names
+  # Affinity to set in the agent pods.
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -39,6 +61,7 @@ policies:
                 operator: In
                 values:
                   - jenkins-ci
+  # Tolerations to set in the agent pods.
   tolerations:
     - key: reserved-node
       operator: Equal
