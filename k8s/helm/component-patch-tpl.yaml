@@ -1,7 +1,8 @@
 apiVersion: v1
 values:
   images:
-    inboundAgent: jenkins/inbound-agent:latest
+    # has to be kept in sync with the image the Jenkins dogu uses
+    inboundAgent: jenkins/inbound-agent:3355.v388858a_47b_33-2-jdk21
 patches:
   values.yaml:
     images:

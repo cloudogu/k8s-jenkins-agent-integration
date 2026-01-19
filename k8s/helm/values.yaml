@@ -7,8 +7,6 @@ global:
     agentSelector:
       matchLabels:
         cloudogu.com/pod-kind: jenkins-ci
-images:
-  inboundAgent: jenkins/inbound-agent:latest
 namespaces:
   create: true
   names: [jenkins-ci]
