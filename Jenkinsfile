@@ -60,8 +60,8 @@ node('docker') {
 
                     stage('Test k8s-jenkins-agent-integration') {
                         k3d.kubectl("get ns jenkins-ci")
-                        k3d.kubectl("get netpol agent-to-jenkins")
-                        k3d.kubectl("-n jenkins-ci get netpol jenkins-to-agent")
+                        k3d.kubectl("get netpol agents-to-jenkins")
+                        k3d.kubectl("-n jenkins-ci get netpol jenkins-to-agents")
                         k3d.kubectl("-n jenkins-ci get role jenkins-ci-role")
                         k3d.kubectl("-n jenkins-ci get rolebinding jenkins-ci-binding")
                     }
