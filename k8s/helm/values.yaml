@@ -36,7 +36,7 @@ rbac:
 policies:
   kyverno:
     # Whether the Kyverno ClusterPolicy to assign agent pods to specific nodes should be applied.
-    enabled: false
+    enabled: true
   gatekeeper:
     # Whether the Gatekeeper Assign policies to assign agent pods to specific nodes should be applied.
     enabled: false
