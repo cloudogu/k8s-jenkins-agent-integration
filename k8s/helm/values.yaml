@@ -26,11 +26,17 @@ namespaces:
 serviceAccount:
   name: jenkins
 
+rbac:
+  # Whether to create the RBAC resources for create/update/delete of secrets in ci namespaces.
+  # This is necessary if the jenkins admin wants to create e.g., container registry secrets with a build job.
+  secretUpdater:
+    enabled: true
+
 # policies for assigning jenkins agent pods to a specific node
 policies:
   kyverno:
     # Whether the Kyverno ClusterPolicy to assign agent pods to specific nodes should be applied.
-    enabled: true
+    enabled: false
   gatekeeper:
     # Whether the Gatekeeper Assign policies to assign agent pods to specific nodes should be applied.
     enabled: false

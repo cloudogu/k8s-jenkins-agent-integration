@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- [#1] Add rbac to create secrets. Ci users can use this to create docker registry credentials. The Kubernetes plugin does not offer this.
 
 ## [v1.0.0] - 2026-01-19
 
