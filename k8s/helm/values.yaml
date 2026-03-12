@@ -26,6 +26,12 @@ namespaces:
 serviceAccount:
   name: jenkins
 
+rbac:
+  # Whether to create the RBAC resources for create/update/delete of secrets in ci namespaces.
+  # This is necessary if the jenkins admin wants to create e.g., container registry secrets with a build job.
+  secretUpdater:
+    enabled: true
+
 # policies for assigning jenkins agent pods to a specific node
 policies:
   kyverno:
